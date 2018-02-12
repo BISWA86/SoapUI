@@ -1,0 +1,25 @@
+import com.eviware.soapui.support.XmlHolder
+import com.eviware.soapui.impl.WsdlTestRunContext
+
+
+def addReq=testRunner.testCase.testSuite.testCases["AddEmp"].testSteps["Add"].getPropertyValue("Request")
+def xmlAdd=new XmlHolder(addReq)
+def name=testRunner.testCase.testSuite.testCases["AddEmp"].getPropertyValue("name")
+def id=testRunner.testCase.testSuite.testCases["AddEmp"].getPropertyValue("id")
+def age=testRunner.testCase.testSuite.testCases["AddEmp"].getPropertyValue("age")
+
+ xmlAdd.setNodeValue("//typ:addEmployee/typ:name",name)
+ xmlAdd.setNodeValue("//typ:addEmployee/typ:id",id)
+ xmlAdd.setNodeValue("//typ:addEmployee/typ:age",age)
+ xmlAdd.setNodeValue("//typ:addEmployee/typ:Department", "CSE")
+
+
+ def newAddXml=xmlAdd.getXml();
+
+ testRunner.testCase.testSuite.testCases["AddEmp"].testSteps["Add"].setPropertyValue("Request", newAddXml)
+
+ def addTestStep=testRunner.testCase.testSuite.testCases["AddEmp"].testSteps["Add"]
+
+ def contextAddEmployee=new WsdlTestRunContext(addTestStep)
+
+ addTestStep.run(testRunner,contextAddEmployee)
